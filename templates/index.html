@@ -9,8 +9,51 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6034913554471877" crossorigin="anonymous"></script>
 </head>
 <body>
+
+  <aside class="ad-rail ad-rail--left" aria-label="Advertisements">
+    <div class="ad-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6034913554471877"
+           data-ad-slot="8229513846"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+    <div class="ad-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6034913554471877"
+           data-ad-slot="8229513846"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+
+  <aside class="ad-rail ad-rail--right" aria-label="Advertisements">
+    <div class="ad-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6034913554471877"
+           data-ad-slot="8229513846"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+    <div class="ad-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6034913554471877"
+           data-ad-slot="8229513846"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
 
   <div class="bg-blobs" aria-hidden="true">
     <div class="blob blob--1"></div>
@@ -98,6 +141,15 @@
       </div>
       <div class="errorbox__text" id="error-text"></div>
       <button class="errorbox__retry" id="error-retry">Try again</button>
+    </section>
+
+    <section class="noresults" id="noresults" hidden>
+      <div class="noresults__icon">🤔</div>
+      <h3 class="noresults__title">Hmm, we couldn't find facts for that.</h3>
+      <p class="noresults__text">Reddit didn't have enough to work with for this topic. Try something else:</p>
+      <div class="chips chips--center" id="noresults-chips">
+        <span class="chips__label">Try:</span>
+      </div>
     </section>
 
     <section class="results" id="results" hidden>

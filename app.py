@@ -57,7 +57,7 @@ def generate_facts(query: str) -> str:
                             continue
     client = OpenAI(api_key=OPENAI_API_KEY)
     openAIResponse = client.responses.create(
-        model="gpt-4o",
+        model="gpt-5.4",
         input="Please compile this information into multiple short, informative, engaging, exciting bullet points that would intrigue a reader (DO NOT Include any **s or -- (double dashes)) After compiling the list of bullet points, ENTIRELY DELETE any bullet points that require context from other bullet points to be understood. Also, ENTIRELY DELETE any bullets points that do not involve " + query + " ensure each of the remaining bullet points are short, informative, engaging, exciting: " + " ".join(redditResponses)
     )
     return openAIResponse.output_text
@@ -91,8 +91,24 @@ def api_facts():
     try:
         raw = generate_facts(query)
         bullets = parse_bullets(raw)
+        if not bullets:
+            return jsonify({
+                "error": "We couldn't find good facts for that topic. Try another one!",
+                "code": "no_results"
+            }), 404
         return jsonify({"query": query, "bullets": bullets, "raw": raw})
+    except json.JSONDecodeError:
+        return jsonify({
+            "error": "We couldn't find good facts for that topic. Try another one!",
+            "code": "no_results"
+        }), 404
     except Exception as e:
+        msg = str(e)
+        if "Expecting value" in msg or "JSON" in msg or "decode" in msg.lower():
+            return jsonify({
+                "error": "We couldn't find good facts for that topic. Try another one!",
+                "code": "no_results"
+            }), 404
         return jsonify({"error": f"Something went wrong: {e}"}), 500
 
 if __name__ == "__main__":

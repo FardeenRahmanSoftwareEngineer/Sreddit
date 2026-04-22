@@ -24,6 +24,8 @@ const deckDots = document.getElementById('deck-dots');
 const cardsEl = document.getElementById('cards');
 const shuffleBtn = document.getElementById('shuffle');
 const chipsContainer = document.getElementById('chips');
+const noresultsEl = document.getElementById('noresults');
+const noresultsChips = document.getElementById('noresults-chips');
 
 const viewDeckBtn = document.getElementById('view-deck');
 const viewGridBtn = document.getElementById('view-grid');
@@ -59,7 +61,7 @@ function showLoading() {
   loadingEl.hidden = false;
   errorEl.hidden = true;
   resultsEl.hidden = true;
-
+  noresultsEl.hidden = true;
   let i = 0;
   loadingText.textContent = LOADING_LINES[0];
   loadingText.style.opacity = '1';
@@ -82,12 +84,26 @@ function hideLoading() {
 
 function showError(msg) {
   hideLoading();
+  hideNoResults();
   errorText.textContent = msg;
   errorEl.hidden = false;
   resultsEl.hidden = true;
 }
 
 function hideError() { errorEl.hidden = true; }
+
+function showNoResults() {
+  hideLoading();
+  hideError();
+  buildRandomChips(noresultsChips);
+  noresultsEl.hidden = false;
+  resultsEl.hidden = true;
+  setTimeout(() => {
+    noresultsEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 60);
+}
+
+function hideNoResults() { noresultsEl.hidden = true; }
 
 function buildDeckCard(fact, idx, topic) {
   const card = document.createElement('article');
@@ -365,11 +381,15 @@ async function submitTopic(query) {
     const data = await res.json();
 
     if (!res.ok) {
-      showError(data.error || "Something went wrong. Try again in a moment.");
+      if (data.code === "no_results") {
+        showNoResults();
+      } else {
+        showError(data.error || "Something went wrong. Try again in a moment.");
+      }
       return;
     }
     if (!data.bullets || data.bullets.length === 0) {
-      showError("No facts came back for that topic. Try being more specific or pick a different subject.");
+      showNoResults();
       return;
     }
     displayResults(data.query || query, data.bullets);
@@ -452,8 +472,9 @@ const TOPIC_POOL = [
   { emoji: '🐢', label: 'sea turtles',         topic: 'sea turtles' },
 ];
 
-function buildRandomChips() {
-  
+function buildRandomChips(container) {
+  container = container || chipsContainer;
+
   const pool = [...TOPIC_POOL];
   for (let i = pool.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -461,9 +482,9 @@ function buildRandomChips() {
   }
   const picks = pool.slice(0, 5);
 
-  const label = chipsContainer.querySelector('.chips__label');
-  chipsContainer.innerHTML = '';
-  if (label) chipsContainer.appendChild(label);
+  const label = container.querySelector('.chips__label');
+  container.innerHTML = '';
+  if (label) container.appendChild(label);
 
   picks.forEach(({ emoji, label: lbl, topic }) => {
     const btn = document.createElement('button');
@@ -474,7 +495,7 @@ function buildRandomChips() {
       input.value = topic;
       submitTopic(topic);
     });
-    chipsContainer.appendChild(btn);
+    container.appendChild(btn);
   });
 }
 
