@@ -82,6 +82,10 @@ def parse_bullets(raw_text: str):
 def index():
     return render_template("index.html")
 
+@app.route("/ads.txt")
+def ads_txt():
+    return "google.com, pub-6034913554471877, DIRECT, f08c47fec0942fa0\n", 200, {"Content-Type": "text/plain"}
+
 @app.route("/api/facts", methods=["POST"])
 def api_facts():
     payload = request.get_json(silent=True) or {}
